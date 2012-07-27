@@ -7,15 +7,34 @@
         <script type="text/javascript" src="jquery.js" ></script>
         <script type="text/javascript" src="jqueryui.js" ></script>
         <script type="text/javascript" src="jquery.mousewheel.min.js" ></script>
+        <script type="text/javascript" src="jquery.lightbox-0.5.js" ></script>        
         <script type="text/javascript" src="jquery.iviewer.js" ></script>        
         <link rel="stylesheet" href="jquery.iviewer.css" />
-        <style>
+        <style type="text/css">      
+          #gallery {
+            background-color: #444;
+            padding: 10px;
+            width: 520px;
+          }
+          #gallery ul { list-style: none; }
+          #gallery ul li { display: inline; }
+          #gallery ul img {
+            border: 5px solid #3e3e3e;
+            border-width: 5px 5px 20px;
+          }
+          #gallery ul a:hover img {
+            border: 5px solid #fff;
+            border-width: 5px 5px 20px;
+            color: #fff;
+          }
+          #gallery ul a:hover { color: #fff; }
+          
           * {
             -webkit-tap-highlight-color: rgba(0, 0, 0, 0);  
             } 
             .viewer
             {
-                width: 100%;
+                width: 99%;
                 height: 550px;
                 border: 1px solid black;
                 position: relative;
@@ -165,6 +184,18 @@
         $(function() {
            var $ = jQuery;
            
+           //Initial load of page
+$(document).ready(sizeContent);
+
+//Every resize of window
+$(window).resize(sizeContent);
+
+//Dynamically assign height
+function sizeContent() {
+    var newHeight = $("html").height() - $("#header").height() - $("#footer").height() + "px";
+    $("#content").css("height", newHeight);
+}
+
            iv2 = $("#viewer2").iviewer(
            {
             src: "GlobalFlows-copy.png"
