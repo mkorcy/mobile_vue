@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title>jquery.iviewer test</title>
+        <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;"> 
+        <script type="text/javascript" src="jquery.js" ></script>
+        <script type="text/javascript" src="jqueryui.js" ></script>
+        <script type="text/javascript" src="jquery.mousewheel.min.js" ></script>
+        <script type="text/javascript" src="jquery.iviewer.js" ></script>        
+        <link rel="stylesheet" href="jquery.iviewer.css" />
+        <style>
+          * {
+            -webkit-tap-highlight-color: rgba(0, 0, 0, 0);  
+            } 
+            .viewer
+            {
+                width: 100%;
+                height: 550px;
+                border: 1px solid black;
+                position: relative;
+            }
+            #box-link { 
+              position: absolute;                           
+              background-color: transparent; 
+              border: 1px solid red;
+              display: none; } 
+            
+            .wrapper
+            {
+                overflow: hidden;
+            }
+        </style>
+    </head>
+    <body>        
+        <div class="wrapper">          
+            <div id="viewer2" class="viewer">
+              <div class="box1">
+    <a id="box-link" href="#"></a>   
+    </div>
+            <div id="node_container"></div>
+
+            </div>          
+        </div>
+        <script type="text/javascript">
+        function update_nodes()
+        {            
+            var nodes = $('.node');
+            $.each(nodes, function(i, node) {
+              var $node = $(node);
+              var orig_top = $node.data('top');
+              var orig_left = $node.data('left');
+              var orig_width = parseInt($node.data('width'));
+              var orig_height = parseInt($node.data('height'));
+              var coords = iv2.iviewer('imageToContainer', parseInt(orig_left),parseInt(orig_top));
+           
+
+              var image_obj = $('#viewer2 img');
+              var image_coords_x = parseInt(coords.x);
+              var image_coords_y = parseInt(coords.y);
+
+              var image_obj_style = image_obj.attr('style');
+              var image_style_top_offset = parseInt(image_obj.get(0).style.top);
+              var image_style_left_offset = parseInt(image_obj.get(0).style.left);
+              var current_zoom = iv2.iviewer('info','zoom',true) / 100;
+              var div_position = $('div#viewer2').position();
+              console.log("node info : orig_top" + orig_top);
+              console.log("node info : orig_left" + orig_left);
+              console.log("node info : orig_width" + orig_width);
+              console.log("node info : orig_height" + orig_height);
+//            var offset_top = b ;
+  //          var offset_left = a ;
+    //        console.log(offset_top);
+      //      console.log(offset_left);
+        //    console.log('===');
+            
+              console.log('zoom : ' + current_zoom);
+
+              var new_width = orig_width * current_zoom;
+              var new_height = orig_height * current_zoom;
+              console.log("node info : new_width" + new_width);
+              console.log("node info : new_height" + new_height);
+              console.log("node info : new_x" + image_coords_x);
+              console.log("node info : new_y" + image_coords_y);
+
+              $node.css('width',new_width);
+              $node.css('height',new_height);
+              $node.css('top',image_coords_y )
+              $node.css('left',image_coords_x )
+              $node.css('display','block');
+              $node.css('position','absolute');
+              $node.css('overflow','hidden');
+              $node.css('background-color','transparent');
+              $node.css('border','3px solid red');                           
+              
+           // $('#box-link').css('left',offset_left);
+          //  $('#box-link').css('width',width);
+          //  $('#box-link').css('height',height);
+           // $('#box-link').css('display','block');
+              
+            });
+            //var top = $('#box-link').css('top');
+            //var left = $('#box-link').css('left');
+            //var orig_width = parseInt($('#box-link').css('width'));
+            //var orig_height = parseInt($('#box-link').css('height'));
+            
+            //console.log(coords);
+            //  console.log(iv2);
+       //     var image_obj = $('#viewer2 img');
+       //     var a = parseInt(coords.x);
+         //   var b = parseInt(coords.y);
+
+//            console.log(a);
+  //          console.log(b);
+    //        console.log('---');
+      //      var image_obj_style = image_obj.attr('style');
+        //    var c = parseInt(image_obj.get(0).style.top);
+          //  var d = parseInt(image_obj.get(0).style.left);
+//            var offset_top = b ;
+  //          var offset_left = a ;
+    //        console.log(offset_top);
+      //      console.log(offset_left);
+        //    console.log('===');
+            //var current_zoom = iv2.iviewer('info','zoom',true) / 100;
+  //          console.log('zoom : ' + current_zoom);
+    //        var width = orig_width * current_zoom;
+      //      var height = orig_height * current_zoom;
+
+
+
+         //   $('#box-link').css('top',offset_top);
+           // $('#box-link').css('left',offset_left);
+          //  $('#box-link').css('width',width);
+          //  $('#box-link').css('height',height);
+           // $('#box-link').css('display','block');
+            
+        }
+        </script>
+        <script>
+       
+        $(function() {
+          $.getJSON('data.json', function(data) {
+            var items = [];
+            console.log(data.map.node);
+            $.each(data.map.nodes, function(i,node) {
+              console.log(node);
+              var item = $('<div></div>');
+              item.addClass("node");
+              item.data('width',node.width);
+              item.data('height',node.height);
+              item.data('left',node.left -2);
+              item.data('top',node.top -2);      
+
+              item.click(function() {
+                alert('node clicked');
+              })       
+              item.appendTo('#node_container');
+            
+            });            
+          });
+        });
+        </script>
+        <script type="text/javascript">
+         var iv2;
+        $(function() {
+           var $ = jQuery;
+           
+           iv2 = $("#viewer2").iviewer(
+           {
+            src: "GlobalFlows-copy.png"
+           });                 
+
+           $('#viewer2').bind('ivieweronafterzoom', function(ev, new_zoom) { 
+            update_nodes();
+           });
+
+           $('#viewer2').bind('ivieweronstopdrag', function(ev, point) { 
+            update_nodes();
+           });
+
+           $('#viewer2').bind('ivieweronfinishload', function(ev, src) {
+            update_nodes();
+           });
+          
+        });
+        $("#box-link").click(function() {
+          alert("Handler for .click() called.");
+        });
+        </script>
+    </body>
+</html>

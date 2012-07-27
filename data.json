@@ -1,0 +1,20 @@
+{"map": {   
+   "nodes": [
+      {
+        "top": 351, 
+        "left": 653, 
+        "width": 207,
+        "height": 204, 
+        "title": "Sample Konfabulator Widget",
+        "name": "main_window"
+      },
+      { 
+        "left": 2135,
+        "width":266,
+        "top": 507,
+        "height": 234,
+        "title": "Sample Konfabulator Widget",
+        "name": "main_window"
+      }
+    ]
+}}   
